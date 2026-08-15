@@ -1,0 +1,1 @@
+ShopSphere is an e-commerce application built for learning and practicing full stack development.
