@@ -11,8 +11,17 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     ## queryset = Product.objects.all()
     serializer_class = ProductSerializer
     
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
     search_fields = ["name","description"]
+    
+    ordering_fields = [
+        "price",
+        "created_at",
+        "name",
+    ]
     
     def get_queryset(self):
         queryset = Product.objects.all()
