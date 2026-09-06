@@ -25,13 +25,13 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
             
         #Price filtering
         min_price = self.request.query_params.get("min_price")
-        max_price = self.request.query_paramas.get("max_price")
+        max_price = self.request.query_params.get("max_price")
         
         if min_price:
-            queryset = queryset.filter(price_gte=min_price)
+            queryset = queryset.filter(price__gte=min_price)
             
         if max_price:
-            queryset = queryset.filter(price_lte=max_price)
+            queryset = queryset.filter(price__lte=max_price)
         
         return queryset
 
