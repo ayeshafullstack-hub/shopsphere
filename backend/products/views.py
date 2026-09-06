@@ -23,6 +23,12 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
         if category:
             queryset = queryset.filter(category = category)
             
+        #Stock filtering
+        in_stock = self.request.query_params.get("in_stock")
+        
+        if in_stock == "true":
+            queryset = queryset.filter(stock__gt=0)
+            
         #Price filtering
         min_price = self.request.query_params.get("min_price")
         max_price = self.request.query_params.get("max_price")
