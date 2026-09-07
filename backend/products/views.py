@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import generics, filters
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
 from .models import Product
 from .serializers import ProductSerializer
@@ -64,4 +64,7 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     def get_permissions(self):
         if self.request.method == "GET":
             return [AllowAny()]
+        
+        if self.request.method == "DELETE":
+            return [IsAdminUser()]
         return [IsAuthenticated()]
