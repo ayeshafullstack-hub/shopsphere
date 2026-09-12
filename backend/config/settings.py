@@ -148,4 +148,15 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 5,
     
     "DEFAULT_SCHEMA_CLASS":  "drf_spectacular.openapi.AutoSchema",
+    
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
