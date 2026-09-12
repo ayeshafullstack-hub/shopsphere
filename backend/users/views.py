@@ -62,6 +62,7 @@ class UserProfileAPIView(APIView):
                 "id":user.id,
                 "username":user.username,
                 "email":user.email,
+                "role":user.profile.role,
             },
             status=status.HTTP_200_OK
         )    
