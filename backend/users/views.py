@@ -65,6 +65,30 @@ class UserProfileAPIView(APIView):
                 "role":user.profile.role,
             },
             status=status.HTTP_200_OK
+        )
+    
+    def patch(self,request):
+        user=request.user
+        
+        username = request.data.get("username")
+        email = request.data.get("email")
+        
+        if username:
+            user.username = username
+        
+        if email: 
+            user.email=email
+        
+        user.save()
+        
+        return Response(
+            {
+                "id":user.id,
+                "username":user.username,
+                "email":user.email,
+                "role":user.profile.role,
+            },
+            status=status.HTTP_200_OK
         )    
 
 #User RegistrationAPIView
