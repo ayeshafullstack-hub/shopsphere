@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import generics, filters
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from users.permissions import IsSeller
 
 from .models import Product
 from .serializers import ProductSerializer
@@ -15,7 +16,10 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     def get_permissions(self):
         if self.request.method == "GET":
             return [AllowAny()]
-        return [IsAuthenticated()]
+        return [IsAuthenticated(),IsSeller()]
+    
+    def perform_create(self,serializer):
+        serializer.save(owner=self.request.user)
     
     filter_backends = [
         filters.SearchFilter,
@@ -65,6 +69,21 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method == "GET":
             return [AllowAny()]
         
+        if self.request.method in ["PUT","PATCH"]:
+            return [IsAuthenticated(),IsSeller()]
+        
         if self.request.method == "DELETE":
             return [IsAdminUser()]
+        
         return [IsAuthenticated()]
+    
+    def queryset(self):
+        if (
+            self.request.user.is_authenticated
+            and hasattr(self.request.user,"profile")
+            and self.request.user.profile.role == "SELLER"
+        ):
+            return Product.objects.filter(owner=self.request.user)
+        
+        return Product.objects.all()
+    
